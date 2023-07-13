@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.maid.connectedlingo'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.maid.connectedlingo"
-        minSdk 23
-        targetSdk 32
+        minSdk 24
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
