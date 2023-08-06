@@ -8,10 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-
-import java.io.Serializable;
-
-
 public class Registration extends AppCompatActivity {
 
     private EditText username;
@@ -36,11 +32,10 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-                account =new Account (username.getText().toString(),emailAddress.getText().toString(),
-                        password.getText().toString());
+                account =new Account (username.getText().toString(),emailAddress.getText().toString(),password.getText().toString());
 
                 boolean checkInsert = db.create(account);
+
                 if (checkInsert){
                     Intent intent = new Intent(Registration.this, Menu.class);
                     intent.putExtra("account", account);
@@ -50,8 +45,7 @@ public class Registration extends AppCompatActivity {
                 {
                     Log.d("ERROR","Failed to insert user");
                 }
-             //
-             //
+
             }
         });
 

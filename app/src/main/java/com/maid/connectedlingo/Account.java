@@ -11,7 +11,6 @@ public class Account implements Serializable {
     private String password;
     private ArrayList<HashMap<String,String>> savedTranslations;
 
-
     public Account(String username, String emailAddress, String password){
         this.username = username;
         this.emailAddress = emailAddress;
