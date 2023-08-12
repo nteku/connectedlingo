@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,10 +52,11 @@ public class Login extends AppCompatActivity {
                         &&  res.getString(3).equals(password.getText().toString())){
 
                             Account account = new Account(res.getString(2),res.getString(1),res.getString(3));
-                            Intent intent = new Intent(Login.this, Menu.class);
+                            Intent intent = new Intent(Login.this, Translation.class);
                             intent.putExtra("account", account);
                             Toast.makeText(Login.this,"Successfully logged in.",Toast.LENGTH_SHORT).show();
                             startActivity(intent);
+                            return;
                         }
                     }
 

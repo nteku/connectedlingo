@@ -18,7 +18,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.nl.translate.Translator;
-import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.TranslatorOptions;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Menu extends AppCompatActivity {
+public class Translation extends AppCompatActivity {
 
     private String selectedInput;
     private String selectedOutput;
@@ -41,7 +40,7 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_translation);
 
         TextView message = findViewById(R.id.openingmessage);
         EditText input = findViewById(R.id.inputText);
@@ -113,16 +112,16 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (TextUtils.isEmpty(input.getText().toString())) {
-                    Toast.makeText(Menu.this, "Please enter text,", Toast.LENGTH_SHORT);
+                    Toast.makeText(Translation.this, "Please enter text,", Toast.LENGTH_SHORT);
                 } else{
 
                     if (!isModelDownloaded) {
                         TranslatorOptions options = new TranslatorOptions.Builder().
                                 setTargetLanguage(languageKeys.get(languages.indexOf(selectedOutput))).
                                 setSourceLanguage(languageKeys.get(languages.indexOf(selectedInput))).build();
-                        translator = Translation.getClient(options);
+                        translator = com.google.mlkit.nl.translate.Translation.getClient(options);
                         sourceText = input.getText().toString();
-                        ProgressDialog progressDialog = new ProgressDialog(Menu.this);
+                        ProgressDialog progressDialog = new ProgressDialog(Translation.this);
                         progressDialog.setMessage("Downloading the translation model ...");
                         progressDialog.setCancelable(false);
                         progressDialog.show();
@@ -144,7 +143,7 @@ public class Menu extends AppCompatActivity {
                         TranslatorOptions options = new TranslatorOptions.Builder().
                                 setTargetLanguage(languageKeys.get(languages.indexOf(selectedOutput))).
                                 setSourceLanguage(languageKeys.get(languages.indexOf(selectedInput))).build();
-                        translator = Translation.getClient(options);
+                        translator = com.google.mlkit.nl.translate.Translation.getClient(options);
                         sourceText = input.getText().toString();
                         Task<String> resultText = translator.translate(sourceText).addOnSuccessListener(new OnSuccessListener<String>() {
                             @Override
@@ -165,7 +164,7 @@ public class Menu extends AppCompatActivity {
         savedLists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Translation.this);
                 builder.setCancelable(true);
                 builder.setTitle("Saved Translations");
                 builder.setMessage(prevTranslations + db.getSavedTranslations(account.getSavedTranslations()));
@@ -183,14 +182,12 @@ public class Menu extends AppCompatActivity {
         Scanner inputLanguages = new Scanner(languageStream);
         while (inputKeys.hasNextLine() && inputLanguages.hasNextLine())
         {
-            // capturing line
             String languageKey = inputKeys.nextLine();
             String language = inputLanguages.nextLine();
 
             languageKeys.add(languageKey);
             languages.add(language);
 
-          //  Log.d("DEBUG",languageKey + " " + language);
         }
 
         inputKeys.close();

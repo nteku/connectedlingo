@@ -40,7 +40,7 @@ public class Registration extends AppCompatActivity {
                 boolean checkInsert = db.create(account);
 
                 if (checkInsert){
-                    Intent intent = new Intent(Registration.this, Menu.class);
+                    Intent intent = new Intent(Registration.this, Translation.class);
                     intent.putExtra("account", account);
                     startActivity(intent);
                 }
@@ -48,13 +48,13 @@ public class Registration extends AppCompatActivity {
                 {
                     Log.d("ERROR","Failed to insert user");
                 }
-
             }
         });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(Registration.this, MainActivity.class);
                 startActivity(intent);
             }

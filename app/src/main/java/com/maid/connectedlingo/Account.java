@@ -1,10 +1,7 @@
 package com.maid.connectedlingo;
 
-import com.google.mlkit.nl.translate.Translation;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Account implements Serializable {
