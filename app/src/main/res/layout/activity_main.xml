@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/secondbackground"
-    tools:context=".`MainActivity.java`">
+    tools:context=".MainActivity">
 
 
     <TextView
@@ -31,10 +31,8 @@
         android:layout_marginTop="4dp"
         android:text="Nice to see you again!"
         android:textColor="@color/white"
-
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintHorizontal_bias="0.072"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />

@@ -1,15 +1,18 @@
 package com.maid.connectedlingo;
 
+import com.google.mlkit.nl.translate.Translation;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Account implements Serializable {
 
     private String username;
     private String emailAddress;
     private String password;
-    private ArrayList<HashMap<String,String>> savedTranslations;
+    private List<ProcessedTranslation> savedTranslations;
 
     public Account(String username, String emailAddress, String password){
         this.username = username;
@@ -41,7 +44,7 @@ public class Account implements Serializable {
         this.username = username;
     }
 
-    public void addTranslation(HashMap <String,String> translation){
+    public void addTranslation(ProcessedTranslation translation){
 
         if (savedTranslations == null)
         {
@@ -51,7 +54,7 @@ public class Account implements Serializable {
         savedTranslations.add(translation);
     }
 
-    public ArrayList<HashMap<String,String>> getSavedTranslations()
+    public List<ProcessedTranslation>  getSavedTranslations()
     {
         return savedTranslations;
     }

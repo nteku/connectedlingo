@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 public class Registration extends AppCompatActivity {
 
     private EditText username;
     private EditText password;
     private EditText emailAddress;
+    private ImageView backButton;
     private Button button;
     private DatabaseHelper db;
     private Account account;
@@ -26,6 +28,7 @@ public class Registration extends AppCompatActivity {
         password = findViewById(R.id.password);
         emailAddress = findViewById(R.id.emailAddress);
         button = findViewById(R.id.button);
+        backButton = findViewById(R.id.backButton);
         db = new DatabaseHelper(this);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +51,15 @@ public class Registration extends AppCompatActivity {
 
             }
         });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Registration.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 }

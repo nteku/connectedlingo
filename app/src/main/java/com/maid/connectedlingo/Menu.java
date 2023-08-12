@@ -1,11 +1,11 @@
 package com.maid.connectedlingo;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,25 +14,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.TranslatorOptions;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.w3c.dom.Text;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -43,7 +35,7 @@ public class Menu extends AppCompatActivity {
     private String sourceText;
     private boolean isModelDownloaded;
     private Translator translator;
-    private int index;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,22 +47,22 @@ public class Menu extends AppCompatActivity {
         EditText input = findViewById(R.id.inputText);
         EditText result = findViewById(R.id.result);
         Button translate = findViewById(R.id.translate);
+        Button savedLists = findViewById(R.id.savedlists);
         Spinner inputDropdownMenu = findViewById(R.id.dropdown_menu);
         Spinner outputDropdownMenu = findViewById(R.id.dropdown_menu2);
+        DatabaseHelper db = new DatabaseHelper(this);
 
 
+        Account account;
         List <String> languageKeys = new ArrayList<>();
         List <String> languages = new ArrayList<>();
         selectedInput = "";
         selectedOutput = "";
-        index = 0;
         Intent intent = getIntent();
 
-        if (intent != null)
-        {
-            Account account = (Account) intent.getSerializableExtra("account");
-            message.setText("Hello " + account.getUsername() + ".");
-        }
+        account = (Account) intent.getSerializableExtra("account");
+        String prevTranslations = db.retrievePreviousTranslations(account.getUsername());
+        message.setText("Hello " + account.getUsername() + ".");
 
         try {
             initializeLanguages(languageKeys,languages);
@@ -149,19 +141,37 @@ public class Menu extends AppCompatActivity {
                         });
                     }
                     else{
+                        TranslatorOptions options = new TranslatorOptions.Builder().
+                                setTargetLanguage(languageKeys.get(languages.indexOf(selectedOutput))).
+                                setSourceLanguage(languageKeys.get(languages.indexOf(selectedInput))).build();
+                        translator = Translation.getClient(options);
+                        sourceText = input.getText().toString();
                         Task<String> resultText = translator.translate(sourceText).addOnSuccessListener(new OnSuccessListener<String>() {
                             @Override
                             public void onSuccess(String s) {
+
                                 result.setText(s);
+                                ProcessedTranslation translation = new ProcessedTranslation(selectedInput,
+                                        input.getText().toString(),selectedOutput,result.getText().toString());
+                                account.addTranslation(translation);
+                                db.saveTranslation(account.getUsername(),account.getEmailAddress(),account.getPassword(), account.getSavedTranslations(),prevTranslations);
                             }
                         });
                     }
-
-
                     }
                 }
         });
 
+        savedLists.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
+                builder.setCancelable(true);
+                builder.setTitle("Saved Translations");
+                builder.setMessage(prevTranslations + db.getSavedTranslations(account.getSavedTranslations()));
+                builder.show();
+            }
+        });
     }
 
 
@@ -186,4 +196,7 @@ public class Menu extends AppCompatActivity {
         inputKeys.close();
         inputLanguages.close();
     }
+
+
+
 }
